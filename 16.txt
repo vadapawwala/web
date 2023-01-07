@@ -1,0 +1,160 @@
+1)
+Subject.java
+import java.util.ArrayList;
+import java.util.List;
+
+public class Subject {
+	
+   private List<Observer> observers = new ArrayList<Observer>();
+   private int state;
+
+   public int getState() {
+      return state;
+   }
+
+   public void setState(int state) {
+      this.state = state;
+      notifyAllObservers();
+   }
+
+   public void attach(Observer observer){
+      observers.add(observer);		
+   }
+
+   public void notifyAllObservers(){
+      for (Observer observer : observers) {
+         observer.update();
+      }
+   } 	
+}
+Observer.java
+public abstract class Observer {
+   protected Subject subject;
+   public abstract void update();
+}
+BinaryObserver.java
+public class BinaryObserver extends Observer{
+
+   public BinaryObserver(Subject subject){
+      this.subject = subject;
+      this.subject.attach(this);
+   }
+
+   @Override
+   public void update() {
+      System.out.println( "Binary String: " + Integer.toBinaryString( subject.getState() ) ); 
+   }
+}
+OctalObserver.java
+public class OctalObserver extends Observer{
+
+   public OctalObserver(Subject subject){
+      this.subject = subject;
+      this.subject.attach(this);
+   }
+
+   @Override
+   public void update() {
+     System.out.println( "Octal String: " + Integer.toOctalString( subject.getState() ) ); 
+   }
+}
+HexaObserver.java
+public class HexaObserver extends Observer{
+
+   public HexaObserver(Subject subject){
+      this.subject = subject;
+      this.subject.attach(this);
+   }
+
+   @Override
+   public void update() {
+      System.out.println( "Hex String: " + Integer.toHexString( subject.getState() ).toUpperCase() ); 
+   }
+}
+ObserverPatternDemo.java
+public class ObserverPatternDemo {
+   public static void main(String[] args) {
+      Subject subject = new Subject();
+
+      new HexaObserver(subject);
+      new OctalObserver(subject);
+      new BinaryObserver(subject);
+
+      System.out.println("First state change: 15");	
+      subject.setState(15);
+      System.out.println("Second state change: 10");	
+      subject.setState(10);
+   }
+}
+2)
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_predict
+data = pd.read_csv(r'kc_house_data.csv')
+data.head(5)
+print(data.shape)
+# Make a list of importatnt feature which is needed to be incuding in training data
+f = ['price', 'bedrooms', 'bathrooms', 'sqft_living', 'floors', 'condition', 'sqft_above', 'sqft_basement', 'yr_built', 
+     'yr_renovated']
+data = data[f]
+print(data.shape)
+# Drop the missing values 
+data = data.dropna()
+print(data.shape)
+# Get the statictial information of the dataset
+data.describe()
+# Now,Divide the dataset into two parts:independent variable and dependent variable
+X = data[f[1:]]
+y = data['price']
+# Split the dataset into training data and testing data
+X_train, X_test, y_train, y_test = train_test_split( X, y, test_size=0.2, random_state=42)
+print(X_train.shape)
+print(X_test.shape)
+print(y_train.shape)
+print(y_test.shape)
+# Fit the regression model
+lr = LinearRegression() # Create object of linear regression class
+lr.fit(X_train,y_train) #fit training data
+print(lr.coef_) 
+# Create the Prediction
+y_test_predict = lr.predict(X_test)
+print(y_test_predict.shape)
+# Plot the error
+g=plt.plot((y_test - y_test_predict),marker='o',linestyle='')
+# # Fit the regression model without b(w0)
+lr = LinearRegression(fit_intercept=False)
+lr.fit(X_train,y_train)
+y_test_predict = lr.predict(X_test)
+g=plt.plot((y_test - y_test_predict),marker='o',linestyle='')
+3)
+// Import events module
+var events = require('events');
+
+// Create an eventEmitter object
+var eventEmitter = new events.EventEmitter();
+
+// Create an event handler as follows
+var connectHandler = function connected() {
+   console.log('connection succesful.');
+  
+   // Fire the data_received event 
+   eventEmitter.emit('data_received');
+}
+
+// Bind the connection event with the handler
+eventEmitter.on('connection', connectHandler);
+ 
+// Bind the data_received event with the anonymous function
+eventEmitter.on('data_received', function() {
+   console.log('data received succesfully.');
+});
+
+// Fire the connection event 
+eventEmitter.emit('connection');
+
+console.log("Program Ended.");
+
+

@@ -1,0 +1,134 @@
+1)
+Lower.java
+import java.io.*;
+import java.util.*;
+
+class LowerCaseInputStream extends FilterInputStream 
+{
+	public LowerCaseInputStream(InputStream in) 
+	{
+		super(in);
+	}
+	public int read() throws IOException 
+	{
+		int c=super.read();
+		return (c==-1?c:Character.toLowerCase((char)c));
+	}
+	public int read(byte[] b,int offset,int len) throws IOException 
+	{
+		int result =super.read(b,offset,len);
+		for (int i=offset;i<offset+result;i++) 
+		{
+			b[i]=(byte)Character.toLowerCase((char)b[i]);
+		}
+		return result;
+	}
+}
+
+
+class Lower
+{
+	public static void main(String[] args) throws IOException
+	{
+	int c;
+	try 
+	{
+		InputStream in =new LowerCaseInputStream(new BufferedInputStream(new FileInputStream("data.txt")));
+		while((c = in.read()) >= 0) 
+		{
+			System.out.print((char)c);
+		}
+		in.close();
+	} 
+	catch(IOException e) 
+	{
+		e.printStackTrace();
+	}
+	}
+}
+2)
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from scipy.stats import zscore
+import seaborn as sns
+data=pd.read_csv('play_tennis.csv')
+data.isnull().sum()
+data.dtypes
+data.head()
+data.outlook.value_counts()
+from sklearn.preprocessing import LabelEncoder
+l=LabelEncoder()
+for i in data.columns:
+    if data[i].dtypes=='object' or data[i].dtypes=='bool':
+        data[i]=pd.Categorical(data[i])
+
+for i in data.columns: 
+        data[i]=l.fit_transform(data[i])
+data.dtypes
+data.head()
+x=data.drop(['play'],axis=1)
+y=data['play']
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.30,random_state=1)
+dtree=DecisionTreeClassifier(criterion='gini',random_state=1)
+dtree.fit(x_train,y_train)
+print(dtree.score(x_train,y_train)) #data is over fitted so we use max_depth =5 means prunning technique
+print(dtree.score(x_test,y_test))
+dtree1=DecisionTreeClassifier(criterion='gini',max_depth=5,random_state=1)
+dtree1.fit(x_train,y_train)
+print(dtree1.score(x_train,y_train)) #data is over fitted so we use max_depth =5 means prunning technique
+print(dtree1.score(x_test,y_test))
+y_predict=dtree.predict(x_test)
+from sklearn import metrics
+cm=metrics.confusion_matrix(y_test,y_predict,labels=[1,0])
+df_cm=pd.DataFrame(cm,index=[i for i in['1','0']],columns=[i for i in['predicted 1','predicted 0']] )
+df_cm
+sns.heatmap(df_cm,annot=True)
+from sklearn.metrics import classification_report
+m=classification_report(y_test,y_predict)
+print(m)
+3)
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+    </style>
+</head>
+<body>
+<script>
+function validateform(){  
+var email = document.getElementById("email").value;
+var password = document.getElementById("psw").value;
+if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
+  {
+    alert("Valid Email Id..")
+    return (true)
+  }
+   else{ alert("You have entered an invalid email address!")
+    return (false)
+   }
+}  
+</script>
+<form name="myform" onsubmit="return validateform()">
+  <div class="container">
+  
+    <p>Please fill in this form to Login.</p>
+    <hr>
+
+    <label for="email"><b>Email</b></label>
+    <input type="text" autocomplete="off" placeholder="Enter Email" name="email" id="email" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input type="password" autocomplete="off" placeholder="Enter Password" name="psw" id="psw" required>
+
+    <hr>
+    <button type="submit" class="registerbtn">Register</button>
+  </div>
+  
+</form>
+
+</body>
+</html>

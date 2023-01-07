@@ -1,0 +1,95 @@
+1)
+Lower.java
+import java.io.*;
+import java.util.*;
+
+class LowerCaseInputStream extends FilterInputStream 
+{
+	public LowerCaseInputStream(InputStream in) 
+	{
+		super(in);
+	}
+	public int read() throws IOException 
+	{
+		int c=super.read();
+		return (c==-1?c:Character.toLowerCase((char)c));
+	}
+	public int read(byte[] b,int offset,int len) throws IOException 
+	{
+		int result =super.read(b,offset,len);
+		for (int i=offset;i<offset+result;i++) 
+		{
+			b[i]=(byte)Character.toLowerCase((char)b[i]);
+		}
+		return result;
+	}
+}
+
+
+class Lower
+{
+	public static void main(String[] args) throws IOException
+	{
+	int c;
+	try 
+	{
+		InputStream in =new LowerCaseInputStream(new BufferedInputStream(new FileInputStream("data.txt")));
+		while((c = in.read()) >= 0) 
+		{
+			System.out.print((char)c);
+		}
+		in.close();
+	} 
+	catch(IOException e) 
+	{
+		e.printStackTrace();
+	}
+	}
+}
+
+2)
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+iris = pd.read_csv("Iris.csv")   # Reading the dataset “Iris.csv”.
+print (iris.head(10))   # head() will display the top rows of the dataset, the default value of this function is 5,
+#that is it will show top 5 rows when no argument is given to it.
+ plt.plot(iris.Id, iris["SepalLengthCm"],"r--")
+plt.show    #plt.show () will display the current figure that you are working on
+iris.plot(kind ="scatter", x ='SepalLengthCm', y ='PetalLengthCm')
+plt.grid()    # grid () function to add grid lines to the plot
+3)
+<html>
+<head>	
+    <script type="text/javascript">
+    function validate()	
+    {
+        var regName=/^[a-zA-z]+[a-zA-Z]+$/;
+        var fname=document.getElementById("txtfname").value;
+        var lname=document.getElementById("txtlname").value;
+        var age=document.getElementById("txtage").value;
+        var mobno=document.getElementById("txtmobno").value;
+        
+        if(age<18||age>50)
+            alert("student age must be 18 to 50");
+        if(!regName.test(fname))
+            alert("invalid name is given");
+        else
+            alert("valid name is given");
+    }
+    </script>
+    </head>
+    <body>
+    <form>
+        enter student first name
+        <input type="text" name="txtfname" id="txtfname"><br>
+        enter student last name
+        <input type="text" name="txtlname" id="txtlname"><br>
+        enter student age
+        <input type="text" name="txtage" id="txtage"><br>
+        enter mobile no
+        <input type="text" name="txtmobno" id="txtmobno"><br>
+        <input type="button" value="validate" onclick="validate()">
+    </form>
+    </body>
+    </html> 

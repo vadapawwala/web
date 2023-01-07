@@ -1,0 +1,214 @@
+1)
+Duck.Java
+
+public abstract class Duck {
+  FlyBehaviour flyBehaviour;
+  QuackBehaviour quackBehaviour;
+  public Duck() {
+  }
+
+  public abstract void display();
+
+  public void performFly() {
+    flyBehaviour.fly();
+  }
+
+  public void performQuack() {
+    quackBehaviour.quack();
+  }
+
+  public void swim() {
+    System.out.println("All ducks float, even decoys!);
+  }
+
+  public void setFlyBehaviour(FlyBehaviour fb) {
+    flyBehaviour = fb;
+  }
+
+  public void setQuackBehaviour(QuackBehaviour qb) {
+    quackBehaviour qb;
+  }
+}
+
+MallardDuck.Java
+
+public class MallardDuck extends Duck {
+
+  public MallardDuck() {
+    quackBehaviour = new Quack();
+    flyBehaviour = new FlyWithWings();
+  }
+
+  public void display() {
+    System.out.println("I'm a real Mallard duck");
+  }
+}
+
+ModelDuck.Java
+
+public class ModolDuck extends Duck {
+  public ModelDuck() {
+    flyBehaviour = new FlyNoWay();
+    quackBehaviour = new Quack();
+  }
+
+  public void display() {
+    System.out.println("I'm a model duck");
+  }
+}
+
+FlyBehaviour.Java
+
+public interface FlyBehaviour {
+  public void fly():
+}
+
+FlyWithWings.Java
+
+public class FlyWithWings implements FlyBehaviour {
+  public void fly() {
+    System.out.println("I'm flying!!");
+  }
+}
+
+FlyNoWay.Java
+
+public class FlyNoWay implements FlyBehaviour {
+  public void fly() {
+    System.out.printlin("I can't fly");
+  }
+}
+
+FlyRocketPowered.Java
+
+public class FlyRocketPowered implements FlyBehaviour {
+  public void fly() {
+    System.out.println("I'm flying with a rocket!");
+  }
+}
+
+QuackBehaviour.Java
+
+public interface QuackBehaviour {
+  public void quack() {
+    System.out.println("Quack");
+  }
+}
+
+Quack.Java
+
+public class Quack implements QuackBehaviour {
+  public void quack() {
+    System.out.println("Quack");
+  }
+}
+
+MuteQuack.Java
+
+public class MuteQuack implements QuackBehaviour {
+  public void quack() {
+    System.out.println("<< Silence >>");
+  }
+}
+
+Squeak.Java
+
+public class Squeak implements QuackBehaviour {
+  public void quack() {
+    System.out.println("Squeak");
+  }
+}
+
+MiniDuckSimulator.Java
+
+public class MiniDuckSimulator {
+  public static void main(String[] args) {
+    Duck mallard = new MallardDuck();
+    mallard.performQuack();
+    mallard.performFly();
+  }
+}
+
+MiniDuckSimulator.Java - Model Duck Edition
+
+public class MiniDuckSimulator {
+  public static void main(String[] args) {
+    Duck mallard = new MallardDuck();
+    mallard.performQuack();
+    mallard.performFly();
+
+    Duck model = new ModelDuck();
+
+    model.performFly();
+
+    model.setFlyBehaviour(new FlyRocketPowered());
+
+    model.performFly();
+  }
+}
+2)
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+iris = pd.read_csv("Iris.csv")   # Reading the dataset “Iris.csv”.
+print (iris.head(10))   # head() will display the top rows of the dataset, the default value of this function is 5,
+#that is it will show top 5 rows when no argument is given to it.
+ 
+
+
+plt.plot(iris.Id, iris["SepalLengthCm"],"r--")
+plt.show    #plt.show () will display the current figure that you are working on
+iris.plot(kind ="scatter", x ='SepalLengthCm', y ='PetalLengthCm')
+plt.grid()    # grid () function to add grid lines to the plot
+
+3)
+
+var mysql = require('mysql');
+var con = mysql.createConnection({
+
+  host: "localhost",
+
+  user: "root",
+
+  password: "Root@123",
+
+  database: "node"
+
+});
+con.connect(function(err) {
+
+  if (err) throw err;
+
+  console.log("Connected!");
+
+  var sql = "INSERT INTO student (rollno,namee, percentage) VALUES ?";  
+
+var values = [  
+
+[1,'abc', 77.6],  
+
+[2,'def', 89.6],  
+
+[3,'ghi', 91.6]  
+
+];  
+con.query(sql, [values], function (err, result) 
+
+ {
+
+    if (err) throw err;
+
+    console.log("Number of records inserted: " + result.affectedRows);  
+
+  });
+
+con.query("SELECT * FROM student", function (err, result, fields) {
+
+    if (err) throw err;
+
+    console.log(result);
+
+  });
+
+});
+

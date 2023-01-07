@@ -1,0 +1,201 @@
+1)
+
+public interface Command {
+	public void execute();
+	public void undo();
+}
+
+public class CeilingFanOffCommand implements Command {
+	CeilingFan ceilingFan;
+	int prevSpeed;
+
+	public CeilingFanOffCommand(CeilingFan ceilingFan) {
+		this.ceilingFan = ceilingFan;
+	}
+
+	public void execute() {
+		prevSpeed = ceilingFan.getSpeed();
+		ceilingFan.off();
+	}
+
+	public void undo() {
+		if (prevSpeed == CeilingFan.HIGH) {
+			ceilingFan.high();
+		} else if (prevSpeed == CeilingFan.MEDIUM) {
+			ceilingFan.medium();
+		} else if (prevSpeed == CeilingFan.LOW) {
+			ceilingFan.low();
+		} else if (prevSpeed == CeilingFan.OFF) {
+			ceilingFan.off();
+		}
+	}
+}
+
+	public class CeilingFanMediumCommand implements Command {
+	CeilingFan ceilingFan;
+	int prevSpeed;
+
+	public CeilingFanMediumCommand(CeilingFan ceilingFan) {
+		this.ceilingFan = ceilingFan;
+	}
+
+	public void execute() {
+		prevSpeed = ceilingFan.getSpeed();
+		ceilingFan.medium();
+	}
+
+	public void undo() {
+		if (prevSpeed == CeilingFan.HIGH) {
+			ceilingFan.high();
+		} else if (prevSpeed == CeilingFan.MEDIUM) {
+			ceilingFan.medium();
+		} else if (prevSpeed == CeilingFan.LOW) {
+			ceilingFan.low();
+		} else if (prevSpeed == CeilingFan.OFF) {
+			ceilingFan.off();
+		}
+	}
+}
+
+public class CeilingFanHighCommand implements Command {
+	CeilingFan ceilingFan;
+	int prevSpeed;
+
+	public CeilingFanHighCommand(CeilingFan ceilingFan) {
+		this.ceilingFan = ceilingFan;
+	}
+
+	public void execute() {
+		prevSpeed = ceilingFan.getSpeed();
+		ceilingFan.high();
+	}
+
+	public void undo() {
+		if (prevSpeed == CeilingFan.HIGH) {
+			ceilingFan.high();
+		} else if (prevSpeed == CeilingFan.MEDIUM) {
+			ceilingFan.medium();
+		} else if (prevSpeed == CeilingFan.LOW) {
+			ceilingFan.low();
+		} else if (prevSpeed == CeilingFan.OFF) {
+			ceilingFan.off();
+		}
+	}
+}
+
+public class CeilingFanLowCommand implements Command {
+	CeilingFan ceilingFan;
+	int prevSpeed;
+
+	public CeilingFanLowCommand(CeilingFan ceilingFan) {
+		this.ceilingFan = ceilingFan;
+	}
+
+	public void execute() {
+		prevSpeed = ceilingFan.getSpeed();
+		ceilingFan.low();
+	}
+
+	public void undo() {
+		if (prevSpeed == CeilingFan.HIGH) {
+			ceilingFan.high();
+		} else if (prevSpeed == CeilingFan.MEDIUM) {
+			ceilingFan.medium();
+		} else if (prevSpeed == CeilingFan.LOW) {
+			ceilingFan.low();
+		} else if (prevSpeed == CeilingFan.OFF) {
+			ceilingFan.off();
+		}
+	}
+}
+public class CeilingFan {
+	public static final int HIGH = 3;
+	public static final int MEDIUM = 2;
+	public static final int LOW = 1;
+	public static final int OFF = 0;
+	String location;
+	int speed;
+
+	public CeilingFan(String location) {
+		this.location = location;
+		speed = OFF;
+	}
+
+	public void high() {
+		speed = HIGH;
+		System.out.println(location + " ceiling fan is on high");
+	} 
+
+	public void medium() {
+		speed = MEDIUM;
+		System.out.println(location + " ceiling fan is on medium");
+	}
+
+	public void low() {
+		speed = LOW;
+		System.out.println(location + " ceiling fan is on low");
+	}
+
+	public void off() {
+		speed = OFF;
+		System.out.println(location + " ceiling fan is off");
+	}
+
+	public int getSpeed() {
+		return speed;
+	}
+}
+2)
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+dataset = pd.read_csv('Position_Salaries.csv')
+X = dataset.iloc[:, 1:-1].values
+y = dataset.iloc[:, -1].values
+dataset.head(5)
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+poly_reg = PolynomialFeatures(degree = 4)
+X_poly = poly_reg.fit_transform(X)
+lin_reg = LinearRegression()
+lin_reg.fit(X_poly, y)
+y_pred = lin_reg.predict(X_poly)
+df = pd.DataFrame({'Real Values':y, 'Predicted Values':y_pred})
+df
+X_grid = np.arange(min(X), max(X), 0.1)
+X_grid = X_grid.reshape((len(X_grid), 1))
+plt.scatter(X, y, color = 'red')
+plt.scatter(X, y_pred, color = 'green')
+plt.plot(X_grid, 
+lin_reg.predict(poly_reg.fit_transform(X_grid)), color = 
+'black')
+plt.title('Polynomial Regression')
+plt.xlabel('Position level')
+plt.ylabel('Salary')
+plt.show()
+3)
+var fs = require('fs');
+//var http = require('http');
+//http.createServer(function (req, res) {
+  
+// Use fs.readFile() method to read the file
+fs.readFile('file1.txt', 'utf8', function(err, data){
+      
+    /*if (err){
+
+        res.writeHead(404, {'Content-Type': 'text/html'});
+        
+  
+        return res.end("404 Not Found");
+  
+      }*/
+    // Display the file content
+    if(err) return console.error(err);
+    
+    
+    console.log(data);
+
+});
+  
+console.log('readFile called');
+

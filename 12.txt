@@ -1,0 +1,107 @@
+1)
+Car.java
+package com.journaldev.design.decorator;
+public interface Car {
+	public void assemble();
+}
+BasicCar.java
+package com.journaldev.design.decorator;
+
+public class BasicCar implements Car {
+
+	@Override
+	public void assemble() {
+		System.out.print("Basic Car.");
+	}
+
+}
+CarDecorator.java
+package com.journaldev.design.decorator;
+
+public class CarDecorator implements Car {
+
+	protected Car car;
+	
+	public CarDecorator(Car c){
+		this.car=c;
+	}
+	
+	@Override
+	public void assemble() {
+		this.car.assemble();
+	}
+
+}
+SportsCar.java
+package com.journaldev.design.decorator;
+public class SportsCar extends CarDecorator {
+
+	public SportsCar(Car c) {
+		super(c);
+	}
+
+	@Override
+	public void assemble(){
+		super.assemble();
+		System.out.print(" Adding features of Sports Car.");
+	}
+}
+
+LuxuryCar.java
+package com.journaldev.design.decorator;
+public class LuxuryCar extends CarDecorator {
+
+	public LuxuryCar(Car c) {
+		super(c);
+	}
+	
+	@Override
+	public void assemble(){
+		super.assemble();
+		System.out.print(" Adding features of Luxury Car.");
+	}
+}
+
+package com.journaldev.design.test;
+
+import com.journaldev.design.decorator.BasicCar;
+import com.journaldev.design.decorator.Car;
+import com.journaldev.design.decorator.LuxuryCar;
+import com.journaldev.design.decorator.SportsCar;
+
+DecoratorPatternTest.java
+public class DecoratorPatternTest {
+
+	public static void main(String[] args) {
+		Car sportsCar = new SportsCar(new BasicCar());
+		sportsCar.assemble();
+		System.out.println("\n*****");
+		
+		Car sportsLuxuryCar = new SportsCar(new LuxuryCar(new BasicCar()));
+		sportsLuxuryCar.assemble();
+	}
+
+}
+2)
+import pandas as pd
+
+#load Iris data set
+iris = pd.read_csv('Iris.csv')
+iris.head()
+iris['code']=pd.factorize(iris.Species)[0]
+iris.tail()
+iris.code.value_counts()
+3)
+var http = require('http'); // 1 - Import Node.js core module
+
+var server = http.createServer(function (req, res) {   // 2 - creating server
+
+    //handle incomming requests here..
+    
+
+});
+
+server.listen(5000); //3 - listen for any incoming requests
+
+console.log('Node.js web server at port 5000 is running..')
+

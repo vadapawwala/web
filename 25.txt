@@ -1,0 +1,88 @@
+1)
+
+class SingleObject 
+{
+	private static SingleObject instance = new SingleObject();
+	
+	private SingleObject(){}
+
+   //Get the only object available
+   public static SingleObject getInstance(){
+      return instance;
+   }
+
+   public void showMessage(){
+      System.out.println("Hello Everyone!!!!");
+   }
+}
+
+ class singletone{
+   public static void main(String[] args) {
+
+
+      //Get the only object available
+      SingleObject object = SingleObject.getInstance();
+	
+
+
+      object.showMessage();
+   }
+}
+2)
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import cross_val_predict
+data = pd.read_csv(r'kc_house_data.csv')
+data.head(5)
+print(data.shape)
+# Make a list of importatnt feature which is needed to be incuding in training data
+f = ['price', 'bedrooms', 'bathrooms', 'sqft_living', 'floors', 'condition', 'sqft_above', 'sqft_basement', 'yr_built', 
+     'yr_renovated']
+data = data[f]
+print(data.shape)
+# Drop the missing values 
+data = data.dropna()
+print(data.shape)
+# Get the statictial information of the dataset
+data.describe()
+# Now,Divide the dataset into two parts:independent variable and dependent variable
+X = data[f[1:]]
+y = data['price']
+# Split the dataset into training data and testing data
+X_train, X_test, y_train, y_test = train_test_split( X, y, test_size=0.2, random_state=42)
+print(X_train.shape)
+print(X_test.shape)
+print(y_train.shape)
+print(y_test.shape)
+# Fit the regression model
+lr = LinearRegression() # Create object of linear regression class
+lr.fit(X_train,y_train) #fit training data
+print(lr.coef_) 
+# Create the Prediction
+y_test_predict = lr.predict(X_test)
+print(y_test_predict.shape)
+# Plot the error
+g=plt.plot((y_test - y_test_predict),marker='o',linestyle='')
+# # Fit the regression model without b(w0)
+lr = LinearRegression(fit_intercept=False)
+lr.fit(X_train,y_train)
+y_test_predict = lr.predict(X_test)
+g=plt.plot((y_test - y_test_predict),marker='o',linestyle='')
+
+3)
+var http = require('http'); // 1 - Import Node.js core module
+
+var server = http.createServer(function (req, res) {   // 2 - creating server
+
+    //handle incomming requests here..
+    
+
+});
+
+server.listen(5000); //3 - listen for any incoming requests
+
+console.log('Node.js web server at port 5000 is running..')
+

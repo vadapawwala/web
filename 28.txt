@@ -1,0 +1,274 @@
+1)
+import java.util.*;
+
+interface Observer {
+    public void update(float temp, float humidity, float pressure);
+}
+
+interface DisplayElement {
+    public void display();
+}
+
+interface Subject {
+    public void registerObserver(Observer o);
+
+    public void removeObserver(Observer o);
+
+    public void notifyObservers();
+}
+
+class WeatherData implements Subject {
+    private ArrayList<Observer> observers;
+    private float temperature;
+    private float humidity;
+    private float pressure;
+
+    public WeatherData() {
+        observers = new ArrayList<>();
+    }
+
+    public void registerObserver(Observer o) {
+        observers.add(o);
+    }
+
+    public void removeObserver(Observer o) {
+        int i = observers.indexOf(o);
+        if (i >= 0) {
+            observers.remove(i);
+        }
+    }
+
+    public void notifyObservers() {
+        for (int i = 0; i < observers.size(); i++) {
+            Observer observer = (Observer) observers.get(i);
+            observer.update(temperature, humidity, pressure);
+        }
+    }
+
+    public void measurementsChanged() {
+        notifyObservers();
+    }
+
+    public void setMeasurements(float temperature, float humidity, float pressure) {
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.pressure = pressure;
+        measurementsChanged();
+    }
+
+    public float getTemperature() {
+        return temperature;
+    }
+
+    public float getHumidity() {
+        return humidity;
+    }
+
+    public float getPressure() {
+        return pressure;
+    }
+}
+
+class ForecastDisplay implements Observer, DisplayElement {
+    private float currentPressure = 29.92f;
+    private float lastPressure;
+    private WeatherData weatherData;
+
+    public ForecastDisplay(WeatherData weatherData) {
+        this.weatherData = weatherData;
+        weatherData.registerObserver(this);
+    }
+
+    public void update(float temp, float humidity, float pressure) {
+        lastPressure = currentPressure;
+        currentPressure = pressure;
+
+        display();
+    }
+
+    public void display() {
+        System.out.print("Forecast: ");
+        if (currentPressure > lastPressure) {
+            System.out.println("Improving weather on the way!");
+        } else if (currentPressure == lastPressure) {
+            System.out.println("More of the same");
+        } else if (currentPressure < lastPressure) {
+            System.out.println("Watch out for cooler weather, rainy weather");
+        }
+    }
+}
+
+class HeatIndexDisplay implements Observer, DisplayElement {
+    float heatIndex = 0.0f;
+    private WeatherData weatherData;
+
+    public HeatIndexDisplay(WeatherData weatherData) {
+        this.weatherData = weatherData;
+        weatherData.registerObserver(this);
+    }
+
+    public void update(float t, float rh, float pressure) {
+        heatIndex = computeHeatIndex(t, rh);
+        display();
+    }
+
+    private float computeHeatIndex(float t, float rh) {
+        float index = (float) ((16.923 + (0.185212 * t) + (5.37941 * rh) - (0.100254 * t * rh)
+                + (0.00941695 * (t * t)) + (0.00728898 * (rh * rh))
+                + (0.000345372 * (t * t * rh)) - (0.000814971 * (t * rh * rh)) +
+                (0.0000102102 * (t * t * rh * rh)) - (0.000038646 * (t * t * t)) + (0.0000291583 *
+                        (rh * rh * rh))
+                + (0.00000142721 * (t * t * t * rh)) +
+                (0.000000197483 * (t * rh * rh * rh)) - (0.0000000218429 * (t * t * t * rh * rh)) +
+                0.000000000843296 * (t * t * rh * rh * rh)) -
+                (0.0000000000481975 * (t * t * t * rh * rh * rh)));
+        return index;
+    }
+
+    public void display() {
+        System.out.println("Heat index is " + heatIndex);
+    }
+}
+
+class StatisticsDisplay implements Observer, DisplayElement {
+    private float maxTemp = 0.0f;
+    private float minTemp = 200;
+    private float tempSum = 0.0f;
+    private int numReadings;
+    private WeatherData weatherData;
+
+    public StatisticsDisplay(WeatherData weatherData) {
+        this.weatherData = weatherData;
+        weatherData.registerObserver(this);
+    }
+
+    public void update(float temp, float humidity, float pressure) {
+        tempSum += temp;
+        numReadings++;
+
+        if (temp > maxTemp) {
+            maxTemp = temp;
+        }
+
+        if (temp < minTemp) {
+            minTemp = temp;
+        }
+
+        display();
+    }
+
+    public void display() {
+        System.out.println("Avgerage/Maximum/Minimum temperature = " + (tempSum / numReadings)
+                + "/" + maxTemp + "/" + minTemp);
+    }
+}
+
+class CurrentConditionsDisplay implements Observer, DisplayElement {
+    private float temperature;
+    private float humidity;
+    private Subject weatherData;
+
+    public CurrentConditionsDisplay(Subject weatherData) {
+        this.weatherData = weatherData;
+        weatherData.registerObserver(this);
+    }
+
+    public void update(float temperature, float humidity, float pressure) {
+        this.temperature = temperature;
+        this.humidity = humidity;
+        display();
+    }
+
+    public void display() {
+        System.out.println("Current conditions: " + temperature
+                + "F degrees and " + humidity + "% humidity");
+    }
+}
+
+class weather {
+
+    public static void main(String[] args) {
+        WeatherData weatherData = new WeatherData();
+
+        CurrentConditionsDisplay currentDisplay = new CurrentConditionsDisplay(weatherData);
+        StatisticsDisplay statisticsDisplay = new StatisticsDisplay(weatherData);
+        ForecastDisplay forecastDisplay = new ForecastDisplay(weatherData);
+
+        weatherData.setMeasurements(70, 55, 40.4f);
+        weatherData.setMeasurements(72, 60, 39.2f);
+        weatherData.setMeasurements(68, 80, 39.2f);
+    }
+}
+
+2)
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+data=pd.read_csv('pima-indians-diabetes.csv')
+data.shape
+data.isnull().sum()
+data.isnull().values.any()
+data.dtypes
+#visualisation
+data.hist()
+columns=list(data)[0:-1]
+data[columns].hist()
+#identifty the correlation
+data.corr()
+sns.heatmap(data.corr(),annot=True)
+sns.pairplot(data)
+#calculate diabetes ratio of true or false target varible
+n_true=len(data.loc[data['class']==True])
+n_false=len(data.loc[data['class']==False])
+print("No.of true cases:{0} {1}%".format(n_true,(n_true/(n_true+n_false))*100))
+print("No.of false cases:{0} {1}%".format(n_false,(n_false/(n_true+n_false))*100))
+#split the data
+from sklearn.model_selection import train_test_split
+x=data.drop('class',axis=1)
+y=data['class']
+X_train,X_test,Y_train,Y_test=train_test_split(x,y,test_size=0.30,random_state=1)
+from sklearn.impute import SimpleImputer
+rep_0=SimpleImputer(missing_values=0,strategy='mean')
+cols=X_train.columns
+X_train=pd.DataFrame(rep_0.fit_transform(X_train))
+X_test=pd.DataFrame(rep_0.fit_transform(X_test))
+X_train.columns=cols
+X_test.columns=cols
+X_train.head()
+from sklearn.naive_bayes import GaussianNB
+diab_mode=GaussianNB()
+diab_mode.fit(X_train,Y_train)
+diab_train_predict=diab_mode.predict(X_train)
+from sklearn import metrics
+print("Model Accuracy:{0}".format(metrics.accuracy_score(Y_train,diab_train_predict)))
+diab_train_predict=diab_mode.predict(X_test)
+from sklearn import metrics
+print("Model Accuracy:{0}".format(metrics.accuracy_score(Y_test,diab_train_predict)))
+cm1=metrics.confusion_matrix(Y_test,diab_train_predict,labels=[1,0])
+df_cm1=pd.DataFrame(cm1,index=[i for i in['1','0']],columns=[i for i in['predict 1','predict o']] )
+df_cm1
+3)
+
+var mysql = require('mysql');
+
+var con = mysql.createConnection({
+  host: 'localhost',
+  user: "root",
+  password: "Root@123",
+  database:'node'
+});
+
+con.connect(function(err) {
+  if (err) throw err;
+  console.log("Connected!");
+});
+
+con.query('SELECT * FROM customers', (err,rows) => {
+    if(err) throw err;
+  
+    console.log('Data received from Db:');
+    console.log(rows);
+  });
+
